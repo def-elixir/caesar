@@ -1,12 +1,25 @@
-extern crate ferris_says;
-
-use ferris_says::say;
-use std::io::{ stdout, BufWriter };
+use std::io;
+use std::io::Read;
+use std::io::Write;
+use std::fs::File;
 
 fn main() {
-    let out = b"Hello fellow Rustaceans!";
-    let width = 24;
+    print!("File > ");
+    io::stdout().flush().unwrap(); 
 
-    let mut writer = BufWriter::new(stdout());
-    say(out, width, &mut writer).unwrap();
+    let mut input = String::new();
+    io::stdin().read_line(&mut input).unwrap();
+
+    // fn trim(&self) -> &str
+    let path: &str = input.trim();
+    match read_from_file(path) {
+        Ok(contents) => println!("{}", contents),
+        Err(e) => println!("{}", e),
+    }
+}
+
+fn read_from_file(file_path: &str) -> Result<String, io::Error> {
+    let mut contents = String::new();
+    File::open(file_path)?.read_to_string(&mut contents)?;
+    Ok(contents)
 }
