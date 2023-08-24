@@ -7,7 +7,7 @@ use std::path::Path;
 const URI: &str = "0.0.0.0:7878";
 const FILE_PATH: &str = "./materials";
 
-pub fn run() {
+fn main() {
     let listener = TcpListener::bind(URI).unwrap();
 
     for stream in listener.incoming() {

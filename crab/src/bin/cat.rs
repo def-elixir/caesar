@@ -1,9 +1,8 @@
 use std::io;
-use std::io::Read;
 use std::io::Write;
-use std::fs::File;
+use crab::file;
 
-pub fn cat() {
+fn main() {
     print!("File > ");
     io::stdout().flush().unwrap(); 
 
@@ -12,14 +11,8 @@ pub fn cat() {
 
     // fn trim_end(&self) -> &str
     let path: &str = input.trim_end();
-    match read_file(path) {
+    match file::read(path) {
         Ok(contents) => println!("{}", contents),
         Err(e) => println!("{}", e),
     }
-}
-
-fn read_file(file_path: &str) -> Result<String, io::Error> {
-    let mut contents = String::new();
-    File::open(file_path)?.read_to_string(&mut contents)?;
-    Ok(contents)
 }
