@@ -1,6 +1,6 @@
 use std::io;
 use std::io::Write;
-use crab::file;
+use crab::file_utils;
 
 fn main() {
     print!("File > ");
@@ -11,7 +11,7 @@ fn main() {
 
     // fn trim_end(&self) -> &str
     let path: &str = input.trim_end();
-    match file::read(path) {
+    match file_utils::read(path) {
         Ok(contents) => println!("{}", contents),
         Err(e) => println!("{}", e),
     }
