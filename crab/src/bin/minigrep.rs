@@ -1,8 +1,8 @@
 use std::env;
-use std::fs::File;
-use std::io::prelude::*;
 use std::process;
 use std::error::Error;
+use crab::file_utils;
+
 struct Config {
     query: String,
     filename: String,
@@ -31,7 +31,7 @@ impl Config {
 
 fn main() {
     let config = Config::new(env::args()).unwrap_or_else(|err| {
-        eprintln!("Problem parsing arguments: {}", err);
+        eprintln!("Parsing arguments error: {}", err);
         process::exit(1);
     });
 
@@ -42,10 +42,8 @@ fn main() {
 }
 
 fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let mut f = File::open(config.filename)?;
 
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)?;
+    let contents: String = file_utils::read(config.filename)?;
 
     let results = if config.case_sensitive {
         search(&config.query, &contents)

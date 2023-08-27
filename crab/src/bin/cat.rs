@@ -1,18 +1,40 @@
-use std::io;
-use std::io::Write;
+use std::env;
+use std::process;
+use std::error::Error;
 use crab::file_utils;
 
-fn main() {
-    print!("File > ");
-    io::stdout().flush().unwrap(); 
+struct Config {
+    filename: String,
+}
 
-    let mut input = String::new();
-    io::stdin().read_line(&mut input).unwrap();
+impl Config {
+    fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+        args.next();
 
-    // fn trim_end(&self) -> &str
-    let path: &str = input.trim_end();
-    match file_utils::read(path) {
-        Ok(contents) => println!("{}", contents),
-        Err(e) => println!("{}", e),
+        let filename = match args.next() {
+            Some(arg) => arg,
+            None => return Err("Didn't get a file name"),
+        };
+
+        Ok(Config { filename })
     }
+}
+
+fn main() {
+    let config = Config::new(env::args()).unwrap_or_else(|err| {
+        eprintln!("Parsing arguments error: {}", err);
+        process::exit(1);
+    });
+
+    if let Err(e) = run(config) {
+        eprintln!("Application error: {}", e);
+        process::exit(1);
+    }
+}
+
+fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let contents: String = file_utils::read(config.filename)?;
+    println!("{}", contents);
+
+    Ok(())
 }
