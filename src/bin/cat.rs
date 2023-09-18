@@ -1,14 +1,14 @@
 use std::env;
 use std::process;
 use std::error::Error;
-use crab::file_utils;
+use caesar::file_utils;
 
-struct Config {
+struct Arguments {
     filename: String,
 }
 
-impl Config {
-    fn new(mut args: std::env::Args) -> Result<Config, &'static str> {
+impl Arguments {
+    fn new(mut args: std::env::Args) -> Result<Arguments, &'static str> {
         args.next();
 
         let filename = match args.next() {
@@ -16,24 +16,24 @@ impl Config {
             None => return Err("Didn't get a file name"),
         };
 
-        Ok(Config { filename })
+        Ok(Arguments { filename })
     }
 }
 
 fn main() {
-    let config = Config::new(env::args()).unwrap_or_else(|err| {
+    let args = Arguments::new(env::args()).unwrap_or_else(|err| {
         eprintln!("Parsing arguments error: {}", err);
         process::exit(1);
     });
 
-    if let Err(e) = run(config) {
+    if let Err(e) = cat(args) {
         eprintln!("Application error: {}", e);
         process::exit(1);
     }
 }
 
-fn run(config: Config) -> Result<(), Box<dyn Error>> {
-    let contents: String = file_utils::read(config.filename)?;
+fn cat(args: Arguments) -> Result<(), Box<dyn Error>> {
+    let contents: String = file_utils::read(&args.filename)?;
     println!("{}", contents);
 
     Ok(())

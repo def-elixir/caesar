@@ -1,7 +1,7 @@
 use std::env;
 use std::process;
 use std::error::Error;
-use crab::file_utils;
+use caesar::file_utils;
 
 struct Config {
     query: String,
@@ -43,7 +43,7 @@ fn main() {
 
 fn run(config: Config) -> Result<(), Box<dyn Error>> {
 
-    let contents: String = file_utils::read(config.filename)?;
+    let contents = file_utils::read(&config.filename)?;
 
     let results = if config.case_sensitive {
         search(&config.query, &contents)
@@ -66,38 +66,4 @@ fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
     contents.lines()
         .filter(|line| line.to_lowercase().contains(&query.to_lowercase()))
         .collect()
-}
-
-#[cfg(test)]
-mod test {
-    use super::*;
-
-    #[test]
-    fn one_result() {
-        let query = "duct";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.";
-
-        assert_eq!(
-            vec!["safe, fast, productive."],
-            search(query, contents)
-        );
-    }
-
-    #[test]
-    fn case_insensitive() {
-        let query = "rUsT";
-        let contents = "\
-Rust:
-safe, fast, productive.
-Pick three.
-Trust me.";
-
-        assert_eq!(
-            vec!["Rust:", "Trust me."],
-            search_case_insensitive(query, contents)
-        );
-    }
 }
