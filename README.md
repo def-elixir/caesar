@@ -49,6 +49,12 @@ $ cargo run
 
 ### Createの追加
 
+* cargo add
+
+```bash
+$ cargo add ferris-says
+```
+
 * CreateをCargo.tomlの[dependencies]に追記
 
 ```Cargo.toml

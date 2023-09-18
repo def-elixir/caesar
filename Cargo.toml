@@ -7,5 +7,12 @@ edition = "2021"
 
 [dependencies]
 ferris-says = "0.2"
+thiserror = "1.0.48"
+anyhow = "1.0.75"
+sea-orm-cli = "0.12.2"
+sea-orm = { version = "^0.12.2", features = [ "sqlx-postgres", "runtime-async-std-native-tls", "macros" ] }
+futures = "0.3.21"
 regex = "1.7.0"
 text-colorizer = "1.0.0"
+
+
