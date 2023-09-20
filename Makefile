@@ -1,5 +1,5 @@
 docker-compose-file=~/data/repo/shell/docker/docker-compose.yml
-
+database-uri=postgres://postgres:postgres@localhost:5432/caesar
 
 up:
 # docker-compose up
@@ -18,5 +18,11 @@ create:
 
 migrate:
 # migrate sea-orm-cli
-	DATABASE_URL="postgres://postgres:postgres@localhost:5432/caesar" \
+	DATABASE_URL=$(database-uri) \
 	sea-orm-cli migrate refresh
+
+entity:
+# generate entity sea-orm-cli
+	sea-orm-cli generate entity \
+	-u $(database-uri) \
+	-o src/entities

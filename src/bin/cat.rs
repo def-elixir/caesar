@@ -1,7 +1,7 @@
 use std::env;
 use std::process;
 use std::error::Error;
-use caesar::file_utils;
+use caesar::utils::file;
 
 struct Arguments {
     filename: String,
@@ -33,7 +33,7 @@ fn main() {
 }
 
 fn cat(args: Arguments) -> Result<(), Box<dyn Error>> {
-    let contents: String = file_utils::read(&args.filename)?;
+    let contents: String = file::read(&args.filename)?;
     println!("{}", contents);
 
     Ok(())

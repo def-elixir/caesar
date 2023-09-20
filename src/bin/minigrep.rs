@@ -1,7 +1,7 @@
 use std::env;
 use std::process;
 use std::error::Error;
-use caesar::file_utils;
+use caesar::utils::file;
 
 struct Config {
     query: String,
@@ -43,7 +43,7 @@ fn main() {
 
 fn run(config: Config) -> Result<(), Box<dyn Error>> {
 
-    let contents = file_utils::read(&config.filename)?;
+    let contents = file::read(&config.filename)?;
 
     let results = if config.case_sensitive {
         search(&config.query, &contents)
