@@ -109,6 +109,13 @@ async fn run() -> Result<(), DbErr> {
 
     let db: DatabaseConnection = Database::connect(DATABASE_URL.to_owned() + DB_NAME).await?;
 
+    let bakery_and_chef: Vec<(bakery::Model, Vec<chef::Model>)> =
+    Bakery::find_by_id(9)
+    .find_with_related(Chef)
+    .all(&db).await?;
+
+    println!("{:?}", bakery_and_chef);
+
     Ok(())
 }
 
