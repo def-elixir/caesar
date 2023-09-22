@@ -24,6 +24,20 @@ async fn insert_bakery(db: &DatabaseConnection, name: &str) -> Result<InsertResu
     Ok(res)
 }
 
+async fn update_bakery(db: &DatabaseConnection, bakery: &bakery::ActiveModel, name: &str) -> Result<bakery::Model, DbErr> {
+    let mut bakery = bakery.clone();
+    bakery.name = Set(name.to_owned());
+    let res = bakery.update(db).await?;
+
+    Ok(res)
+}
+
+async fn delete_bakery(db: &DatabaseConnection, bakery: &bakery::ActiveModel) -> Result<DeleteResult, DbErr> {
+    let res = bakery.clone().delete(db).await?;
+
+    Ok(res)
+}
+
 async fn select_all_bakeries(db: &DatabaseConnection) -> Result<Vec<bakery::Model>, DbErr> {
     let bakeries: Vec<bakery::Model> = Bakery::find().all(db).await?;
 
@@ -37,12 +51,12 @@ async fn find_bakery_by_id(db: &DatabaseConnection, id: i32) -> Result<Option<ba
 }
 
 async fn filter_bakery(db: &DatabaseConnection, name: &str) -> Result<Option<bakery::Model>, DbErr> {
-    let filter_bakery: Option<bakery::Model> = Bakery::find()
+    let bakery: Option<bakery::Model> = Bakery::find()
     .filter(bakery::Column::Name.eq(name))
     .one(db)
     .await?;
 
-    Ok(filter_bakery)
+    Ok(bakery)
 }
 
 async fn run() -> Result<(), DbErr> {
@@ -69,8 +83,32 @@ async fn run() -> Result<(), DbErr> {
     //     }
     // }
 
+    // if let Some(bakery) = find_bakery_by_id(&db, 114).await? {
+    //     let update_bakery = update_bakery_with_active_model(&db, &bakery.into_active_model(), "Grate Happy").await?;
+    //     println!("{:?}", update_bakery);
+    // }
+    // match find_bakery_by_id(&db, 2).await? {
+    //     None => {
+    //         println!("Not found");
+    //     },
+    //     Some(bakery) => {
+    //         let update_bakery = update_bakery_with_active_model(&db, &bakery.into_active_model(), "Grate Happy").await?;
+    //         println!("{:?}", update_bakery);
+    //     }
+    // }
+
+    // match find_bakery_by_id(&db, 2).await? {
+    //     None => {
+    //         println!("Not found");
+    //     },
+    //     Some(bakery) => {
+    //         let result = delete_bakery(&db, &bakery.into_active_model()).await?;
+    //         println!("{:?}", result);
+    //     }
+    // }
+
     let db: DatabaseConnection = Database::connect(DATABASE_URL.to_owned() + DB_NAME).await?;
-    // todo UPDATE & DELETE
+
     Ok(())
 }
 
