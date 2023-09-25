@@ -3,6 +3,7 @@ use futures::executor::block_on;
 use sea_orm::*;
 use caesar::entities::{prelude::*,*};
 use caesar::entities::bakery::ActiveModel;
+use serde::*;
 
 const DATABASE_URL: &str = "postgres://postgres:postgres@localhost:5432/";
 const DB_NAME: &str = "caesar";
@@ -107,14 +108,19 @@ async fn run() -> Result<(), DbErr> {
     //     }
     // }
 
+    //  let bakery_and_chef: Vec<(bakery::Model, Vec<chef::Model>)> =
+    //  Bakery::find_by_id(9)
+    //  .find_with_related(Chef)
+    //  .all(&db).await?;
+
     let db: DatabaseConnection = Database::connect(DATABASE_URL.to_owned() + DB_NAME).await?;
 
-    let bakery_and_chef: Vec<(bakery::Model, Vec<chef::Model>)> =
-    Bakery::find_by_id(9)
-    .find_with_related(Chef)
-    .all(&db).await?;
+    let bakery_and_chef: Vec<JsonValue> = Bakery::find()
+    .into_json()
+    .all(&db)
+    .await?;
 
-    println!("{:?}", bakery_and_chef);
+    println!("{:#?}", bakery_and_chef);
 
     Ok(())
 }
