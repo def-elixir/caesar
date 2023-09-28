@@ -9,7 +9,7 @@ https://www.rust-lang.org/ja/tools/install
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
-* 最新版のインストール
+* 最新版のインストール、及びバージョンアップ
 
 ```bash
 $ rustup update
@@ -18,8 +18,8 @@ $ rustup update
 * バージョンの確認
 
 ```bash
-$ rustup -V
-$ rustc -V
+$ rustup --version
+$ rustc --version
 $ cargo --version
 ```
 

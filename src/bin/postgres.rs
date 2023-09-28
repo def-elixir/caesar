@@ -3,7 +3,6 @@ use futures::executor::block_on;
 use sea_orm::*;
 use caesar::entities::{prelude::*,*};
 use caesar::entities::bakery::ActiveModel;
-use serde::*;
 
 const DATABASE_URL: &str = "postgres://postgres:postgres@localhost:5432/";
 const DB_NAME: &str = "caesar";
