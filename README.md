@@ -61,3 +61,9 @@ $ cargo add ferris-says
 [dependencies]
 ferris-says = "0.2"
 ```
+
+* Clippy(公式lintツール)
+
+```bash
+cargo clippy
+```
