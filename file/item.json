@@ -3,5 +3,10 @@
     "item_id": 1,
     "name": "Mike",
     "description": "So cute!"
+  },
+  {
+    "item_id": 2,
+    "name": "White",
+    "description": "So cute!"
   }
 ]
